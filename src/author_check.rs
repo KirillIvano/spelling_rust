@@ -1,7 +1,7 @@
 use crate::types::RelationDict;
 
 pub fn author_check(
-    relations_dict: RelationDict,
+    relations_dict: &RelationDict,
     neighbours: Vec<String>,
     candidats: Vec<String>,
 ) -> Vec<String> {
@@ -9,18 +9,24 @@ pub fn author_check(
     let mut max_size = 0;
 
     for candidat in candidats {
-        let candidat_relations = relations_dict.get(&candidat).unwrap();
-        let intersection_size = neighbours
-            .iter()
-            .filter(|neigh| candidat_relations.contains_key(*neigh))
-            .count();
+        let candidat_relations = relations_dict.get(&candidat);
 
-        if intersection_size > max_size {
-            max_size = intersection_size;
-            best_candidates.clear();
-            best_candidates.push(candidat);
-        } else if intersection_size == max_size {
-            best_candidates.push(candidat);
+        match candidat_relations {
+            Some(relations) => {
+                let intersection_size = neighbours
+                .iter()
+                .filter(|neigh| relations.contains_key(*neigh))
+                .count();
+    
+                if intersection_size > max_size {
+                    max_size = intersection_size;
+                    best_candidates.clear();
+                    best_candidates.push(candidat);
+                } else if intersection_size == max_size {
+                    best_candidates.push(candidat);
+                }
+            },
+            _ => (),
         }
     }
 
@@ -39,5 +45,5 @@ fn test_author_check() {
 
     let candidats = Vec::from(["military".to_string(), "in".to_string()]);
 
-    author_check(relation_dict, neighbours, candidats);
+    author_check(&relation_dict, neighbours, candidats);
 }

@@ -1,5 +1,7 @@
 use std::collections::HashMap;
 
+use crate::types::FreqDict;
+
 fn find_freq_median(dict: &HashMap<String, u32>) -> u32 {
     let mut frequences = dict.values().cloned().collect::<Vec<u32>>();
     frequences.sort();
@@ -22,7 +24,7 @@ fn test_freq_median() {
     assert_eq!(result, 9);
 }
 
-const SEPARATORS: [char; 6] = ['.', ':', ';', ' ', '\n', ','];
+const SEPARATORS: [char; 11] = ['.', ':', ';', ' ', '\n', ',', '!', '!', '…', '-', '?'];
 
 pub fn get_words_from_text(text: String) -> Vec<String> {
     return text
@@ -32,6 +34,7 @@ pub fn get_words_from_text(text: String) -> Vec<String> {
         .collect();
 }
 
+/// отфильтровывает лишние значения из частотного словаря
 pub fn filter_by_median(dict: &HashMap<String, u32>) -> HashMap<String, u32> {
     let median = find_freq_median(&dict);
 

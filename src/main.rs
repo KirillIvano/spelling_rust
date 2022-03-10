@@ -8,6 +8,8 @@ mod speller;
 mod utils;
 
 fn main() {
-    speller::speller("чисто поли", "dostoevski")
+    let result = speller::arrange_spelling("праподает судьбя человеческая", "dostoevski")
         .expect("Не удалось расчитать ошибку написания или в тексте нет ошибок");
+
+    println!("Исправления: {:?}", serde_json::to_string_pretty(&result));
 }
